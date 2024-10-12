@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: {
         app: './src/index.js',
-        quill: 'quill',
     },
     output: {
         filename: '[name].[contenthash].js',
@@ -13,20 +12,22 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-            chunks: 'all'
-        },
+            chunks: 'all',
+            cacheGroups: {
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
+        }
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            chunks: ['app', 'quill'],
+            chunks: ['app', 'vendors'],
         }),
     ],
-    module: {
-        rules: [
-            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-        ],
-    },
 
     mode: "development"
 };
